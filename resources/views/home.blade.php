@@ -5,7 +5,9 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">Trang Quản Lý</div>
+                <div class="card-header">
+                    <!-- Trang Quản Lý -->
+                </div>
 
                 <div class="card-body">
                     @if (session('status'))
@@ -14,7 +16,7 @@
                         </div>
                     @endif
 
-                    welcome
+                    <!-- welcome -->
                 </div>
             </div>
         </div>

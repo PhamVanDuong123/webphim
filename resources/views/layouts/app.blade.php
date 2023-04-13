@@ -577,7 +577,7 @@
               <div class="r3_counter_box">
                 <i class="pull-left fa fa-file icon-rounded"></i>
                 <div class="stats">
-                  <h5><strong>$452</strong></h5>
+                  <h5><strong>{{$category_total}}</strong></h5>
                   <span>Danh mục phim</span>
                 </div>
               </div>
@@ -586,7 +586,7 @@
               <div class="r3_counter_box">
                 <i class="pull-left fa fa-child user1 icon-rounded"></i>
                 <div class="stats">
-                  <h5><strong>$1019</strong></h5>
+                  <h5><strong>{{$genre_total}}</strong></h5>
                   <span>Thể loại phim</span>
                 </div>
               </div>
@@ -595,7 +595,7 @@
               <div class="r3_counter_box">
                 <i class="pull-left fa fa-globe user2 icon-rounded"></i>
                 <div class="stats">
-                  <h5><strong>$1012</strong></h5>
+                  <h5><strong>{{$country_total}}</strong></h5>
                   <span>Quốc gia phim</span>
                 </div>
               </div>
@@ -604,7 +604,7 @@
               <div class="r3_counter_box">
                 <i class="pull-left fa fa-pie-chart dollar1 icon-rounded"></i>
                 <div class="stats">
-                  <h5><strong>$450</strong></h5>
+                  <h5><strong>{{$movie_total}}</strong></h5>
                   <span>Tổng phim</span>
                 </div>
               </div>

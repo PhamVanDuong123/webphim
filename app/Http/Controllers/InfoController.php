@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use \Illuminate\Support\Facades\View;
+
 use App\Models\Info;
 class InfoController extends Controller
 {
@@ -24,7 +26,7 @@ class InfoController extends Controller
     public function create()
     {
         $info= Info::find(1);
-        return view('admin.info.form');
+        return view('admin.info.form',compact('info'));
     }
 
     /**
