@@ -18,6 +18,13 @@
          <div class="section-bar clearfix">
             <h1 class="section-title"><span>{{$genre_slug->title}}</span></h1>
          </div>
+         <div class="section-bar clearfix">
+            <div class="row">
+               @include('pages.include.locphim')
+             
+            </div>
+            
+         </div>
          <div class="halim_box">
             @foreach($movie as $key => $mov)
             <article class="col-md-3 col-sm-3 col-xs-6 thumb grid-item post-37606">
@@ -40,10 +47,10 @@
                         @endif
                      </span><span class="episode"><i class="fa fa-play" aria-hidden="true"></i>
                         @if($mov->phude==0)
-                        Phụ đề -Tập 1/ {{$mov->sotap}}
+                        Phụ đề - {{$mov->episode_count}}/{{$mov->sotap}}
                        
                         @elseif($mov->phude==1)
-                        Thuyết Minh -Tập 1/ {{$mov->sotap}}
+                        Thuyết Minh -  {{$mov->episode_count}}/{{$mov->sotap}}
                      
                        
                         @endif

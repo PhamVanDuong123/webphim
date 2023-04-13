@@ -13,7 +13,8 @@ class CountryController extends Controller
      */
     public function index()
     {
-        //
+        $list = Country::all();
+        return view('admincp.country.index', compact('list'));
     }
 
     /**
@@ -35,6 +36,27 @@ class CountryController extends Controller
      */
     public function store(Request $request)
     {
+        
+        $data= $request->validate(
+            [
+                'title' => 'required|min:5|max:50',
+                'description' => 'required|min:5|max:255',
+              
+               
+            ],
+            [
+                'required' => ':attribute không được để trống',
+                'min' => ':attribute có độ dài tối thiểu là :min ký tự',
+                'max' => ':attribute có độ dài tối đa là :max ký tự',
+               
+            ],
+            [
+                'title' => 'Tên quốc gia',
+                'description' => 'Mô tả',
+              
+               
+            ]
+        );
         $data = $request->all();
         $country = new Country();
         $country->title = $data['title'];
@@ -85,6 +107,7 @@ class CountryController extends Controller
         $country->description = $data['description'];
         $country->status = $data['status'];
         $country->save();
+        flash()->addSuccess('Cập nhật quốc gia thành công');
         return redirect()->back();
     }
 

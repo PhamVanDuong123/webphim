@@ -63,6 +63,8 @@
                   @endif
                </span>
                <span class="episode"><i class="fa fa-play" aria-hidden="true"></i>
+                  {{$hot->episode_count}}/{{$hot->sotap}} -
+
                   @if($hot->phude==0)
                   Phụ đề
                   @if($hot->season!=0)
@@ -129,7 +131,7 @@
          </a>
       </div>
       <div id="halim-advanced-widget-2-ajax-box" class="halim_box">
-         @foreach($cate_home->movie->take(12) as $key => $mov)
+         @foreach($cate_home->movie->take(16) as $key => $mov)
          <article class="col-md-3 col-sm-3 col-xs-6 thumb grid-item post-37606">
             <div class="halim-item">
                <a class="halim-thumb" href="{{route('movie',$mov->slug)}}">
@@ -149,6 +151,7 @@
                      Trailer
                      @endif
                   </span><span class="episode"><i class="fa fa-play" aria-hidden="true"></i>
+                     {{$mov->episode_count}}/{{$mov->sotap}} -
                      @if($mov->phude==0)
                      Phụ đề
                      @if($mov->season!=0)

@@ -1,15 +1,17 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
+<div class="container-fuild">
     <div class="row justify-content-center">
         <div class="col-md-12">
             <a href="{{route('movie.create')}}" class="btn btn-primary">Thêm Phim</a>
-            <table class="table" id="tablephim">
+            <table class="table table-responsive" style="display: block;" id="tablephim">
                 <thead>
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">Tên phim</th>
+                        <th scope="col">Số tập</th>
+                        <th scope="col">Tập phim</th>
                         <th scope="col">Thời lượng phim</th>
                         <th scope="col">Hình ảnh</th>
                         <th scope="col">Phim hot</th>
@@ -18,15 +20,13 @@
                         <!-- <th scope="col">Mô tả</th> -->
                         <th scope="col">Đường dẫn</th>
                         <th scope="col">Trạng thái</th>
-                     
                         <th scope="col">Danh mục</th>
-                        
                         <th scope="col">Thuộc phim</th>
                         <th scope="col">Thể loại</th>
                         <th scope="col">Quốc gia</th>
-                        <th scope="col">Số tập</th>
+                        
+                       
                         <th scope="col">Ngày tạo</th>
-
                         <th scope="col">Ngày update</th>
                         <th scope="col">Năm phim</th>
                         <th scope="col">Season</th>
@@ -39,18 +39,42 @@
                     <tr>
                         <th scope="row">{{$key}}</th>
                         <td>{{$cate->title}}</td>
+                        <td>{{$cate->episode_count}}/{{$cate->sotap}} Tập</td>
+                        <td><a href="{{route('add-episode',[$cate->id])}}" class="btn btn-danger btn-sm">Thêm tập phim</a></td>
                         <td>{{$cate->thoiluong}}</td>
-                        <td><img width="100" src="{{asset('uploads/movie/'.$cate->image)}}"></td>
                         <td>
-                            @if($cate->phim_hot==0)
-                            Không
+                            @csrf
+                            <img width="100" src="{{asset('uploads/movie/'.$cate->image)}}">
+                            <input data-movie_id="{{$cate->id}}" id="file-{{$cate->id}}" type="file"  class="form-control file_image " accept="image/*">
+                            <span id="success_image"></span>
+                        </td>
+                        <td>
+                        <select class="phimhot_choose" id="{{$cate->id}}">
+                            @if($cate->phimhot==0)
+                            {
+                                <option value="1">Hot</option>
+                                <option selected value="0">Không</option>
+                            }
                             @else
-                            Có
+                            {
+                                <option selected value="1">Hot</option>
+                                <option value="0">Không</option>
+
+                            }
                             @endif
+                         </select>
 
                         </td>
                         <td>
-                            @if($cate->resolution==0)
+                            @php 
+                            $option= array('0'=>'HD','1'=>'SD','2'=>'HDCam','3'=>'Cam','4'=>'FullHD','5'=>'Trailer');
+                            @endphp
+                            <select class="resolution_choose" id="{{$cate->id}}">
+                              @foreach($option as $key=> $resolution)
+                              <option {{$cate->resolution==$key ?'selected' : ''}} value="{{$key}}">{{$resolution}}</option>
+                              @endforeach
+                           </select>
+                            <!-- @if($cate->resolution==0)
                             HD
                             @elseif($cate->resolution==1)
                             SD
@@ -62,35 +86,70 @@
                             FullHD
                             @elseif($cate->resolution==5)
                             Trailer
-                            @endif
+                            @endif -->
 
                         </td>
                         <td>
-                            @if($cate->phude==0)
+                            <!-- @if($cate->phude==0)
                             Phụ đề
                             @elseif($cate->phude==1)
                             Thuyết minh
+                            @endif -->
+                            <select class="phude_choose" id="{{$cate->id}}">
+                            @if($cate->phude==0)
+                            {
+                                <option value="1">Thuyết minh</option>
+                                <option selected value="0">Phụ đề</option>
+                            }
+                            @else
+                            {
+                                <option selected value="1">Thuyết minh</option>
+                                <option value="0">Phụ đề</option>
 
+                            }
                             @endif
+                        </selected>
 
                         </td>
-
                         <!-- <td>{{$cate->description}}</td> -->
                         <td>{{$cate->slug}}</td>
                         <td>
-                            @if($cate->status)
-                            Hiển thị
+                        <select class="trangthai_choose" id="{{$cate->id}}">
+                            @if($cate->status==0)
+                            {
+                                <option value="1">Hiển thị</option>
+                                <option selected value="0">Không hiển thị</option>
+                            }
                             @else
-                            Không hiển thị
+                            {
+                                <option selected value="1">Hiển thị</option>
+                                <option value="0">Không hiển thị</option>
+
+                            }
                             @endif
+                        </selected>
                         </td>
-                        <td>{{$cate->category->title}}</td>
                         <td>
-                            @if($cate->thuocphim=='phimle')
-                                 Phim  lẻ
+                            <!-- {{$cate->category->title}} -->
+                        {!! Form::select('category_id', $category, isset($cate) ? $cate->category->id : '',
+                        ['class'=>'form-control','class'=>'category_choose','id'=>$cate->id]) !!}
+                        </td>
+                       </div>
+                        <td>
+                        <select class="thuocphim_choose" id="{{$cate->id}}">
+                            @if($cate->thuocphim=='phimbo')
+                            {
+                                <option value="phimle">Phim lẻ</option>
+                                <option selected value="phimbo">Phim bộ</option>
+                            }
                             @else
-                                Phim bộ
+                            {
+                                <option selected value="phimle">Phim lẻ</option>
+                                <option value="phimbo">Phim bộ</option>
+
+                            }
                             @endif
+                        </selected>
                         </td>
                        
                       
@@ -101,15 +160,19 @@
 
                             @endforeach
                         </td>
-                        <td>{{$cate->country->title}}</td>
-                        <td>{{$cate->sotap}}</td>
+                        <td>
+                           
+                        {!! Form::select('country_id', $country, isset($cate) ? $cate->country->id : '',
+                        ['class'=>'form-control','class'=>'country_choose','id'=>$cate->id]) !!}
+                        </td>
+                 
                         <td>{{$cate->create_at}}</td>
                         <td>{{$cate->update_at}}</td>
                         <td>
                             <form method="POST">
                                 @csrf
                                 {!!Form::selectYear('year',2000,2023,isset($cate->year)? $cate->year :
-                                '',['class'=>'select-year','id'=>$cate->id])!!}
+                                '',['class'=>'select-year','id'=>$cate->id,'placeholder'=>'-Năm phim-'])!!}
                             </form>
 
                         </td>
@@ -125,7 +188,7 @@
 
 
                             {!! Form::select('topview', ['0'=>'Ngày','1'=>'Tuần','2'=>'Tháng'], isset($cate->topview) ?
-                            $cate->topview : '', ['class'=>'select-topview','id'=>$cate->id]) !!}
+                            $cate->topview : '', ['class'=>'select-topview','id'=>$cate->id,'placeholder'=>'-Views-']) !!}
 
                         <td>
                         {!! Form::open(['method'=>'DELETE','route'=>['movie.destroy',$cate->id],'onsubmit'=>'return confirm("Bạn có chắc muốn xóa?")']) !!}

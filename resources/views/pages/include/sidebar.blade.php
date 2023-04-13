@@ -14,8 +14,7 @@
                     <div class="item post-37176">
                         <a href="{{route('movie',$hot_sidebar->slug)}}" title="{{$hot_sidebar->title}}">
                             <div class="item-link">
-                                <img src="{{asset('uploads/movie/'.$hot_sidebar->image)}}" class="lazy post-thumb"
-                                    alt="{{$hot_sidebar->title}}" title="{{$hot_sidebar->title}}" />
+                                <img src="{{asset('uploads/movie/'.$hot_sidebar->image)}}" class="lazy post-thumb" alt="{{$hot_sidebar->title}}" title="{{$hot_sidebar->title}}" />
                                 <span class="is_trailer">
                                     @if($hot_sidebar->resolution==0)
                                     HD
@@ -33,11 +32,34 @@
                                 </span>
                             </div>
                             <p class="title">{{$hot_sidebar->title}}</p>
+
                         </a>
-                        <div class="viewsCount" style="color: #9d9d9d;">3.2K lượt xem</div>
-                        <div style="float: left;">
-                            <span class="user-rate-image post-large-rate stars-large-vang"
-                                style="display: block;/* width: 100%; */">
+                        <div class="viewsCount" style="color: #9d9d9d;">
+                          @if($hot_sidebar->count_view >0)
+                          
+                               {{$hot_sidebar->count_view }} lượt xem
+                          
+                          @else
+                          
+                             @php
+                              echo rand(100,99999)
+                             @endphp
+                             lượt xem
+                          
+                          @endif
+                        </div>
+                        <ul class="list-inline rating" style="float:left" title="Average Rating">
+
+                            <div style="float:left;">
+                                @for($count=1; $count<=5; $count++) <li title="star_rating" style="display: block;; font-size:20px;padding: 0; float: left; color:#ffcc00">&#9733;
+                                    </li>
+
+                                @endfor
+
+                        </ul>
+
+                        <div >
+                            <span class="user-rate-image post-large-rate stars-large-vang" style="/* width: 100%; */">
                                 <span style="width: 0%"></span>
                             </span>
                         </div>
@@ -67,8 +89,7 @@
                     <div class="item post-37176">
                         <a href="{{route('movie',$hot_sidebar->slug)}}" title="{{$hot_sidebar->title}}">
                             <div class="item-link">
-                                <img src="{{asset('uploads/movie/'.$hot_sidebar->image)}}" class="lazy post-thumb"
-                                    alt="{{$hot_sidebar->title}}" title="{{$hot_sidebar->title}}" />
+                                <img src="{{asset('uploads/movie/'.$hot_sidebar->image)}}" class="lazy post-thumb" alt="{{$hot_sidebar->title}}" title="{{$hot_sidebar->title}}" />
                                 <span class="is_trailer">
                                     @if($hot_sidebar->resolution==0)
                                     HD
@@ -89,8 +110,7 @@
                         </a>
                         <div class="viewsCount" style="color: #9d9d9d;">3.2K lượt xem</div>
                         <div style="float: left;">
-                            <span class="user-rate-image post-large-rate stars-large-vang"
-                                style="display: block;/* width: 100%; */">
+                            <span class="user-rate-image post-large-rate stars-large-vang" style="display: block;/* width: 100%; */">
                                 <span style="width: 0%"></span>
                             </span>
                         </div>
@@ -115,16 +135,13 @@
         </div>
         <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
             <li class="nav-item active">
-                <a class="nav-link filter-sidebar" id="pill-home" data-toggle="pill" href="#ngay" role="tab"
-                    aria-controls="pills-home" aria-selected="true">Ngày</a>
+                <a class="nav-link filter-sidebar" id="pill-home" data-toggle="pill" href="#ngay" role="tab" aria-controls="pills-home" aria-selected="true">Ngày</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link filter-sidebar" id="pill-tab" data-toggle="pill" href="#tuan" role="tab"
-                    aria-controls="pills-profile" aria-selected="false">Tuần</a>
+                <a class="nav-link filter-sidebar" id="pill-tab" data-toggle="pill" href="#tuan" role="tab" aria-controls="pills-profile" aria-selected="false">Tuần</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link filter-sidebar" id="pill-contact" data-toggle="pill" href="#thang" role="tab"
-                    aria-controls="pills-contact" aria-selected="false">Tháng</a>
+                <a class="nav-link filter-sidebar" id="pill-contact" data-toggle="pill" href="#thang" role="tab" aria-controls="pills-contact" aria-selected="false">Tháng</a>
             </li>
         </ul>
 

@@ -5,6 +5,8 @@ use App\Models\Movie;
 use Illuminate\Http\Request;
 use App\Models\Episode;
 use Carbon\Carbon;
+use GrahamCampbell\ResultType\Success;
+
 class EpisodeController extends Controller
 {
     /**
@@ -38,15 +40,54 @@ class EpisodeController extends Controller
      */
     public function store(Request $request)
     {
+        $data= $request->validate(
+            [
+                'movie_id' => 'required',
+                'link' => 'required',
+                'episode' => 'required',
+               
+            ],
+            [
+                'required' => ':attribute không được để trống',
+                'min' => ':attribute có độ dài tối thiểu là :min ký tự',
+                'max' => ':attribute có độ dài tối đa là :max ký tự',
+               
+            ],
+            [
+                'link' => 'link tập phim',
+                'episode' => 'Tập phim',
+                'movie_id' => 'Tên phim',
+               
+            ]
+        );
         $data = $request->all();
-        $episode = new Episode();
-        $episode->movie_id = $data['movie_id'];
-        $episode->linkphim = $data['link'];
-        $episode->episode = $data['episode'];
-        $episode->create_at= Carbon::now('Asia/Ho_Chi_Minh');
-        $episode->update_at= Carbon::now('Asia/Ho_Chi_Minh');
-        $episode->save();
-        return redirect()->to('episode.index');
+        $episode_check= Episode::where('episode',$data['episode'])->where('movie_id',$data['movie_id'])->count();
+        if( $episode_check)
+        {
+            return redirect()->back();
+
+        }
+        else
+        {
+            $episode = new Episode();
+            $episode->movie_id = $data['movie_id'];
+            $episode->linkphim = $data['link'];
+            $episode->episode = $data['episode'];
+            $episode->create_at= Carbon::now('Asia/Ho_Chi_Minh');
+            $episode->update_at= Carbon::now('Asia/Ho_Chi_Minh');
+            $episode->save();
+          
+            
+        }
+       flash()->addSuccess('Thêm thành công');
+        return redirect()->route('episode.index');
+    }
+    public function add_episode($id)
+    {
+        $movie=Movie::find($id);
+        $list_episode= Episode::with('movie')->where('movie_id',$id)->orderBy('movie_id','DESC')->get();
+        return view('admincp.episode.add_episode',compact('list_episode','movie'));
+
     }
 
     /**
@@ -81,7 +122,29 @@ class EpisodeController extends Controller
      */
     public function update(Request $request, $id)
     {
+        
+        $data= $request->validate(
+            [
+                'movie_id' => 'required',
+                'link' => 'required',
+                'episode' => 'required',
+               
+            ],
+            [
+                'required' => ':attribute không được để trống',
+                'min' => ':attribute có độ dài tối thiểu là :min ký tự',
+                'max' => ':attribute có độ dài tối đa là :max ký tự',
+               
+            ],
+            [
+                'link' => 'link tập phim',
+                'episode' => 'Tập phim',
+                'movie_id' => 'Tên phim',
+               
+            ]
+        );
         $data = $request->all();
+
         $episode = Episode::find($id);
         $episode->movie_id = $data['movie_id'];
         $episode->linkphim = $data['link'];
@@ -89,6 +152,7 @@ class EpisodeController extends Controller
         $episode->create_at= Carbon::now('Asia/Ho_Chi_Minh');
         $episode->update_at= Carbon::now('Asia/Ho_Chi_Minh');
         $episode->save();
+        flash()->addSuccess('Cập nhật thành công');
         return redirect()->route('episode.index');
     }
 
@@ -102,7 +166,8 @@ class EpisodeController extends Controller
     {
         $episode= Episode::find($id);
         $episode->delete();
-        return redirect()->to('episode.index');
+      
+        return redirect()->back();
     }
     public function select_movie()
     {
@@ -131,4 +196,5 @@ class EpisodeController extends Controller
          echo $output;
 
     }
+   
 }

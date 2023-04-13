@@ -6,7 +6,10 @@
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
+    <li class="nav-item ">
+        <a class="nav-link" href="{{route('info.create')}}">Thông tin website</a>
+      </li>
+      <li class="nav-item ">
         <a class="nav-link" href="{{route('category.create')}}">Danh Mục</a>
       </li>
       <li class="nav-item">
@@ -16,7 +19,7 @@
         <a class="nav-link" href="{{route('country.create')}}">Quốc Gia</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{{route('movie.create')}}">Phim</a>
+        <a class="nav-link" href="{{route('movie.index')}}">Phim</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="{{route('episode.create')}}">Tập Phim</a>

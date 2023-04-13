@@ -10,11 +10,11 @@
    <meta name="DC.language" scheme="utf-8" content="vi" />
    <meta name="language" content="Việt Nam">
 
-
+   <meta name="csrf-token" content="{{ csrf_token() }}">
    <link rel="shortcut icon" href="https://www.pngkey.com/png/detail/360-3601772_your-logo-here-your-company-logo-here-png.png" type="image/x-icon" />
    <meta name="revisit-after" content="1 days" />
    <meta name='robots' content='index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1' />
-   <title>Phim hay 2021 - Xem phim hay nhất</title>
+   <title>Phim hay 2023 - Xem phim hay nhất</title>
    <meta name="description" content="Phim hay 2021 - Xem phim hay nhất, xem phim online miễn phí, phim hot , phim nhanh" />
    <link rel="canonical" href="">
    <link rel="next" href="" />
@@ -29,7 +29,8 @@
    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 
    <link rel='dns-prefetch' href='//s.w.org' />
-
+   <div id="fb-root"></div>
+  
    <link rel='stylesheet' id='bootstrap-css' href='{{asset('css/bootstrap.min.css')}}' media='all' />
    <link rel='stylesheet' id='style-css' href='{{asset('css/style.css')}}' media='all' />
    <link rel='stylesheet' id='wp-block-library-css' href='{{asset('css/style.min.css')}}' media='all' />
@@ -151,9 +152,9 @@
 
                   </ul>
                </div>
-               <ul class="nav navbar-nav navbar-left" style="background:#000;">
+               <!-- <ul class="nav navbar-nav navbar-left" style="background:#000;">
                   <li><a href="#" onclick="locphim()" style="color: #ffed4d;">Lọc Phim</a></li>
-               </ul>
+               </ul> -->
             </div>
          </nav>
          <div class="collapse navbar-collapse" id="search-form">
@@ -197,6 +198,8 @@
 
    <script type='text/javascript' src='{{asset('public/js/halimtheme-core.min.js?ver=1626273138')}}' id='halim-init-js'></script>
    <div id="fb-root"></div>
+   <!-- //facebook -->
+   <script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v16.0&appId=1073274126775855&autoLogAppEvents=1" nonce="NlvkNbJW"></script>
    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v16.0&appId=1073274126775855&autoLogAppEvents=1" nonce="WPtEsPyg"></script>
    <script type="text/javascript">
       $(document).ready(function() {
@@ -282,6 +285,76 @@
          });
 
       });
+   </script>
+   <!-- đánh giá phim -->
+   <script type="text/javascript">
+         
+         function remove_background(movie_id)
+         {
+            for(var count=1; count<=5;count++)
+            {
+               $('#'+movie_id+'-'+count).css('color','#ccc');
+            }
+         }
+         $(document).on('mouseenter','.rating',function()
+         {
+            var index= $(this).data("index");
+            var movie_id=$(this).data('movie_id');
+            remove_background(movie_id);
+            for(var count=1;count<=index;count++)
+            {
+               $('#'+movie_id+'-'+count).css('color','#ffcc00');
+            }
+         });
+         $(document).on('mouseleave','.rating',function()
+         {
+            var index= $(this).data("index");
+            var movie_id=$(this).data('movie_id');
+            var rating= $(this).data("rating");
+            remove_background(movie_id);
+            for(var count=1;count<=rating;count++)
+            {
+               $('#'+movie_id+'-'+count).css('color','#ffcc00');
+            }
+         });
+         //click đánh giá
+         $(document).on('click','.rating',function()
+         {
+            var index= $(this).data("index");
+            var movie_id=$(this).data('movie_id');
+            $.ajax({
+               url:"{{route('add-rating')}}",
+               method:"POST",
+               data:
+               {
+
+                  index:index,
+                  movie_id:movie_id
+               },
+               headers:
+               {
+                  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+               },
+               success:function(data)
+               {
+                  if(data=='done')
+                  {
+                              
+                   alert("Bạn đã đánh giá "+index +" trên 5");
+                   location.reload();
+                  }
+                  else if(data =='exist')
+                  {
+                    alert("Bạn đã đánh giá phim này rồi,cảm ơn bạn nhé");
+                  }
+                  else
+                  {
+                   alert("Lỗi đánh giá");
+                  }
+               }
+            });
+         });
+        
    </script>
    <style>
       #overlay_mb {

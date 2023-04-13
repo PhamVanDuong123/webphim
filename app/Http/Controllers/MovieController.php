@@ -21,7 +21,12 @@ class MovieController extends Controller
      */
     public function index()
     {
-        $list = Movie::with('category', 'movie_genre', 'country','genre')->orderBy('id', 'DESC')->get();
+        $list = Movie::with('category', 'movie_genre', 'country','genre')->withCount('episode')->orderBy('id', 'DESC')->get();
+        //count sotap
+        // return response()->json($list);
+         $category=Category::pluck('title','id');
+         $country=Country::pluck('title','id');
+        // dd($list_episode_count);
         $path=public_path().'/json/';
         if(!is_dir($path))
         {
@@ -29,7 +34,7 @@ class MovieController extends Controller
 
         }
         File::put($path.'movies.json',json_encode($list));
-        return view('admincp.movie.index', compact('list'));
+        return view('admincp.movie.index', compact('list','category','country'));
     }
 
     /**
@@ -55,6 +60,42 @@ class MovieController extends Controller
      */
     public function store(Request $request)
     {
+        $data= $request->validate(
+            [
+                'title' => 'required|min:5|max:50',
+                'sotap' => 'required',
+                'resolution' => 'required',
+                'phude' => 'required',
+                'description' => 'required',
+                'name_eng' => 'required',
+                'category_id' => 'required',
+                'country_id' => 'required',
+                'genre' => 'required',
+                'image' => 'required',
+
+               
+            ],
+            [
+                'required' => ':attribute không được để trống',
+                'min' => ':attribute có độ dài tối thiểu là :min ký tự',
+                'max' => ':attribute có độ dài tối đa là :max ký tự',
+               
+            ],
+            [
+                'title' => 'Tên danh mục',
+                'sotap' => 'Số tập phim',
+                'resolution' => 'Định dạng phim',
+                'phude' => 'Phụ đề',
+                'description' => 'Mô tả phim',
+                'name_eng' => 'Tên tiếng Anh',
+                'category_id' => 'Tên danh mục',
+                'country_id' => 'Tên quốc gia',
+                'genre' => 'Tên thể loại',
+                'image' => 'Hình ảnh',
+              
+               
+            ]
+        );
         $data = $request->all();
         $movie = new Movie();
         $movie->title = $data['title'];
@@ -64,6 +105,7 @@ class MovieController extends Controller
         $movie->phude = $data['phude'];
         $movie->thoiluong = $data['thoiluong'];
         $movie->tags = $data['tags'];
+        $movie->count_view = rand(100,99999);
         $movie->name_eng = $data['name_eng'];
         $movie->phim_hot = $data['phim_hot'];
         $movie->description = $data['description'];
@@ -94,6 +136,7 @@ class MovieController extends Controller
             $movie->image = $new_image;
         }
         $movie->save();
+        flash()->addSuccess('Thêm phim thành công');
         // them nhieu the loai phim 
         $movie->movie_genre()->attach($data['genre']);
         return redirect()->route('movie.index');
@@ -136,6 +179,43 @@ class MovieController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $data= $request->validate(
+            [
+                'title' => 'required|min:5|max:50',
+                'sotap' => 'required',
+                'resolution' => 'required',
+                'phude' => 'required',
+                'description' => 'required',
+                'name_eng' => 'required',
+                'category_id' => 'required',
+                'country_id' => 'required',
+                'genre' => 'required',
+                'image' => 'required',
+
+               
+            ],
+            [
+                'required' => ':attribute không được để trống',
+                'min' => ':attribute có độ dài tối thiểu là :min ký tự',
+                'max' => ':attribute có độ dài tối đa là :max ký tự',
+               
+            ],
+            [
+                'title' => 'Tên danh mục',
+                'sotap' => 'Số tập phim',
+                'resolution' => 'Định dạng phim',
+                'phude' => 'Phụ đề',
+                'description' => 'Mô tả phim',
+                'name_eng' => 'Tên tiếng Anh',
+                'category_id' => 'Tên danh mục',
+                'country_id' => 'Tên quốc gia',
+                'genre' => 'Tên thể loại',
+                'image' => 'Hình ảnh',
+              
+               
+            ]
+        );
+        
         $data = $request->all();
        
         $movie = Movie::find($id);
@@ -146,6 +226,7 @@ class MovieController extends Controller
         $movie->thoiluong = $data['thoiluong'];
         $movie->tags = $data['tags'];
         $movie->slug = $data['slug'];
+        // $movie->count_view = rand(100,99999);
         $movie->name_eng = $data['name_eng'];
         $movie->phim_hot = $data['phim_hot'];
         $movie->description = $data['description'];
@@ -178,6 +259,7 @@ class MovieController extends Controller
         $movie->save();
       
         $movie->movie_genre()->sync($data['genre']);
+        flash()->addSuccess('Cập nhật phim thành công');
         return redirect()->route('movie.index');
     }
 
@@ -294,5 +376,74 @@ class MovieController extends Controller
                 
         }
         echo $output;
+    }
+    public function category_choose(Request $request)
+    {
+        $data= $request->all();
+        $movie=Movie::find($data['movie_id']);
+        $movie->category_id=$data['category_id'];
+        $movie->save();
+    }
+    public function country_choose(Request $request)
+    {
+        $data= $request->all();
+        $movie=Movie::find($data['movie_id']);
+        $movie->country_id=$data['country_id'];
+        $movie->save();
+    }
+    public function trangthai_choose(Request $request)
+    {
+        $data= $request->all();
+        $movie=Movie::find($data['movie_id']);
+        $movie->status=$data['trangthai_id'];
+        $movie->save();
+    }
+    public function thuocphim_choose(Request $request)
+    {
+        $data= $request->all();
+        $movie=Movie::find($data['movie_id']);
+        $movie->thuocphim=$data['thuocphim_val'];
+        $movie->save();
+    }
+    public function phimhot_choose(Request $request)
+    {
+        $data= $request->all();
+        $movie=Movie::find($data['movie_id']);
+        $movie->phim_hot=$data['phimhot_val'];
+        $movie->save();
+    }
+    public function phude_choose(Request $request)
+    {
+        $data= $request->all();
+        $movie=Movie::find($data['movie_id']);
+        $movie->phude=$data['phude_val'];
+        $movie->save();
+    }
+    public function resolution_choose(Request $request)
+    {
+        $data= $request->all();
+        $movie=Movie::find($data['movie_id']);
+        $movie->resolution=$data['resolution_val'];
+        $movie->save();
+    }
+    public  function update_image_movie_ajax(Request $request)
+    {
+        $get_image = $request->file('file');
+        $movie_id = $request->movie_id;
+
+        if ($get_image) {
+             $movie=Movie::find($movie_id);
+             unlink('public/uploads/movie/' . $movie->image);
+                $get_name_image = $get_image->getClientOriginalName();
+                $name_image = current(explode('.', $get_name_image));
+                $new_image = $name_image . rand(0, 9999) . '.' . $get_image->getClientOriginalExtension();
+                $get_image->move('public/uploads/movie/', $new_image);
+                $movie->image = $new_image;
+                $movie->save();
+            
+        }
+        
+      
+
     }
 }

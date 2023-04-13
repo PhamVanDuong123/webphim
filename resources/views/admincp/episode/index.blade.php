@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
+<div class="container-fuild">
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <table class="table">
+        <table class="table table-responsive" id="tablephim">
               <thead>
                 <tr>
                   <th scope="col">#</th>
@@ -24,7 +24,7 @@
                   <td>{{$episode->movie->title}}</td>
                   <td><img width="100" src="{{asset('uploads/movie/'.$episode->movie->image)}}"></td>
                   <td >{{$episode->episode}}</td>
-                  <td style="width: 200px;">{!!$episode->linkphim!!}</td>
+                  <td style="width: 200px;">{{$episode->linkphim}}</td>
     
                   <td>
                       {!! Form::open(['method'=>'DELETE','route'=>['episode.destroy',$episode->id],'onsubmit'=>'return confirm("Bạn có chắc muốn xóa?")']) !!}

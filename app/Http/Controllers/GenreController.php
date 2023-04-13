@@ -13,7 +13,8 @@ class GenreController extends Controller
      */
     public function index()
     {
-        //
+        $list = Genre::all();
+        return view('admincp.genre.index', compact('list'));
     }
 
     /**
@@ -35,6 +36,23 @@ class GenreController extends Controller
      */
     public function store(Request $request)
     {
+        $data= $request->validate(
+            [
+                'title' => 'required|min:5|max:50',
+               
+            ],
+            [
+                'required' => ':attribute không được để trống',
+                'min' => ':attribute có độ dài tối thiểu là :min ký tự',
+                'max' => ':attribute có độ dài tối đa là :max ký tự',
+               
+            ],
+            [
+                'title' => 'Tên danh mục',
+                'description' => 'Mô tả',
+               
+            ]
+        );
         $data = $request->all();
         $genre = new Genre();
         $genre->title = $data['title'];
@@ -78,6 +96,23 @@ class GenreController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $data= $request->validate(
+            [
+                'title' => 'required|min:5|max:50',
+               
+            ],
+            [
+                'required' => ':attribute không được để trống',
+                'min' => ':attribute có độ dài tối thiểu là :min ký tự',
+                'max' => ':attribute có độ dài tối đa là :max ký tự',
+               
+            ],
+            [
+                'title' => 'Tên danh mục',
+                'description' => 'Mô tả',
+               
+            ]
+        );
         $data = $request->all();
         $genre = Genre::find($id);
         $genre->title = $data['title'];
@@ -85,6 +120,7 @@ class GenreController extends Controller
         $genre->description = $data['description'];
         $genre->status = $data['status'];
         $genre->save();
+        flash()->addSuccess('Cập nhật thể loại thành công');
         return redirect()->back();
     }
 

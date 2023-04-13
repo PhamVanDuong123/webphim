@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Facade\Ignition\Support\Packagist\Package;
 use Illuminate\Http\Request;
 use App\Models\Category;
+
+
 class CategoryController extends Controller
 {
     /**
@@ -13,7 +16,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
+        $list = Category::orderBy('position','ASC')->get();
+        return view('admincp.category.index', compact('list'));
     }
 
     /**
@@ -23,8 +27,8 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        $list = Category::orderBy('position','ASC')->get();
-        return view('admincp.category.form', compact('list'));
+      
+        return view('admincp.category.form');
     }
 
     /**
@@ -35,6 +39,23 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
+        $data= $request->validate(
+            [
+                'title' => 'required|min:5|max:50',
+               
+            ],
+            [
+                'required' => ':attribute không được để trống',
+                'min' => ':attribute có độ dài tối thiểu là :min ký tự',
+                'max' => ':attribute có độ dài tối đa là :max ký tự',
+               
+            ],
+            [
+                'title' => 'Tên danh mục',
+                'description' => 'Mô tả',
+               
+            ]
+        );
         $data = $request->all();
         $category = new Category();
         $category->title = $data['title'];
@@ -42,7 +63,11 @@ class CategoryController extends Controller
         $category->description = $data['description'];
         $category->status = $data['status'];
         $category->save();
-        return redirect()->back();
+      
+        flash()->addSuccess('Thêm thành công');
+       // Display an error toast with no title  
+        return redirect()->route('category.index');
+       
     }
 
     /**
@@ -78,6 +103,23 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $data= $request->validate(
+            [
+                'title' => 'required|min:5|max:50',
+               
+            ],
+            [
+                'required' => ':attribute không được để trống',
+                'min' => ':attribute có độ dài tối thiểu là :min ký tự',
+                'max' => ':attribute có độ dài tối đa là :max ký tự',
+               
+            ],
+            [
+                'title' => 'Tên danh mục',
+                'description' => 'Mô tả',
+               
+            ]
+        );
         $data = $request->all();
         $category = Category::find($id);
         $category->title = $data['title'];
@@ -85,7 +127,10 @@ class CategoryController extends Controller
         $category->description = $data['description'];
         $category->status = $data['status'];
         $category->save();
-        return redirect()->back();
+        flash()->addSuccess('Cập nhật danh mục thành công');
+        // Display an error toast with no title  
+         return redirect()->route('category.index');
+       
     }
 
     /**

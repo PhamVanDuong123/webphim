@@ -18,6 +18,13 @@
          <div class="section-bar clearfix">
             <h1 class="section-title"><span>{{$cate_slug->title}}</span></h1>
          </div>
+         <div class="section-bar clearfix">
+            <div class="row">
+               @include('pages.include.locphim')
+             
+            </div>
+            
+         </div>
          <div class="halim_box">
             @foreach($movie as $key => $mov)
             <article class="col-md-3 col-sm-3 col-xs-6 thumb grid-item post-37606">
@@ -25,32 +32,34 @@
                   <a class="halim-thumb" href="{{route('movie',$mov->slug)}}">
                      <figure><img class="lazy img-responsive" src="{{asset('uploads/movie/'.$mov->image)}}" alt="BẠN CÙNG PHÒNG CỦA TÔI LÀ GUMIHO" title="{{$mov->title}}"></figure>
                      <span class="status">
-                     @if($mov->resolution==0)
-              HD
-              @elseif($mov->resolution==1)
-              SD
-              @elseif($mov->resolution==2)
-              HDCam
-              @elseif($mov->resolution==3)
-              Cam
-              @elseif($mov->resolution==4)
-              FullHD
-              @elseif($mov->resolution==5)
-              Trailer
-              @endif
+                        @if($mov->resolution==0)
+                        HD
+                        @elseif($mov->resolution==1)
+                        SD
+                        @elseif($mov->resolution==2)
+                        HDCam
+                        @elseif($mov->resolution==3)
+                        Cam
+                        @elseif($mov->resolution==4)
+                        FullHD
+                        @elseif($mov->resolution==5)
+                        Trailer
+                        @endif
+
                      </span><span class="episode"><i class="fa fa-play" aria-hidden="true"></i>
-                     @if($mov->phude==0)
-                  Phụ đề
-                  @if($mov->season!=0)
-                  - Season{{$mov->season}}
-                  @endif
-                  @elseif($mov->phude==1)
-                  Thuyết Minh
-                  @if($mov->season!=0)
-                  - Season {{$mov->season}}
-                  @endif
-                  @endif
-                    </span>
+                        {{$mov->episode_count}}/{{$mov->sotap}} -
+                        @if($mov->phude==0)
+                        Phụ đề
+                        @if($mov->season!=0)
+                        - Season{{$mov->season}}
+                        @endif
+                        @elseif($mov->phude==1)
+                        Thuyết Minh
+                        @if($mov->season!=0)
+                        - Season {{$mov->season}}
+                        @endif
+                        @endif
+                     </span>
                      <div class="icon_overlay"></div>
                      <div class="halim-post-title-box">
                         <div class="halim-post-title ">
