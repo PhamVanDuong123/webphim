@@ -115,6 +115,16 @@
                             @endforeach
                         </ul>
                         <div class="clearfix"></div>
+                        <div class="section-bar clearfix">
+                <h2 class="section-title"><span style="color:#ffed4d">Bình luận</span></h2>
+            </div>
+            <div class="entry-content htmlwrap clearfix">
+                <article id="watch_trailer" class="watch_trailer" class="item-content">
+
+                    <div class="fb-comments" style="background-color: white;" data-href="https://subnhanh.cc/phim/tran-chien-sau-gio-hoc-duty-after-school-2023-vietsub.html" data-width="100%" data-numposts="5"></div>
+
+                </article>
+            </div>
 
                      </div>
                   </div>
